@@ -1,0 +1,10 @@
+nav(style="z-index: 999; padding: .5rem .75rem;").shadow-sm.top-header
+  span(style="position: absolute; font-size:25px; cursor:pointer;" onclick="openNav()").collapse-button &#9776;
+  a(href="/").navbar-brand.navbar-centered.brand
+    span.brand-text Search Screener
+
+  .dropdown.search-dropdown
+      .form-group.has-search.navbar-search.mb-0
+          span.fa.fa-search.form-control-feedback
+          input(type="text" placeholder='Search Ticker...')#search-ticker.form-control
+          #search-ticker-dropdown.dropdown-menu.search-ticker-dropdown

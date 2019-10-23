@@ -1,0 +1,16 @@
+nav.navbar.top-navbar.shadow-sm
+    .dropdown-nav
+        button(href="javascript:void(0);").dropbtn.nav-link= __('top-nav.screener.toggle')
+        .dropdown-nav-content
+            a(href="/search")= __('top-nav.screener.table')
+            //- a(href="/search/chart")= __('top-nav.screener.chart')
+
+
+
+#sidenav.sidenav
+    a(href="javascript:void(0)" onclick="closeNav()" style="font-size: 30px; text-align: right; padding-right: 40px;").closebtn &times;
+    button.dropdown-btn= __('top-nav.screener.toggle')
+        i.fa.fa-caret-down
+    .dropdown-container
+        a(href="/search")= __('top-nav.screener.table')
+        //- a(href="/search/chart")= __('top-nav.screener.chart')

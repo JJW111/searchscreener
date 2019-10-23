@@ -1,0 +1,4 @@
+show status like 'Threads_connected';
+show variables like 'max_connections';
+show status like 'Max_used_connections';
+show status like 'Threads_running';

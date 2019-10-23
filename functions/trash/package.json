@@ -1,0 +1,15 @@
+{
+  "name": "search",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jinwon Jeong",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^2.4.3",
+    "dotenv": "^8.0.0",
+    "mysql": "^2.17.1"
+  }
+}

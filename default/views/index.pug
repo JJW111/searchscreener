@@ -1,0 +1,206 @@
+include ./common.pug
+
+doctype html
+html
+  head  
+    +meta
+    meta(name='viewport' content='width=device-width, initial-scale=1, maximum-scale=2, minimum-scale=1, user-scalable=yes')
+    title= __('title')
+    +common_css
+    +common_js
+  body
+    .app
+      #top-fixed.top-wrap(style="z-index: 2;")
+        include ./includes/header.pug
+        include ./includes/navbar.pug
+
+      .container-fluid
+        .row
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.evrdesc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.evr')
+                  th= __('main-rank.m3cp')
+              tbody
+                - if (main && main.evrdesc && main.evrdesc.length > 0) {
+                    each item in main.evrdesc
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span= fix(item.evr)
+                        td
+                          span(class=sign(item.m3cp))= fix(item.m3cp)
+                - }
+
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.evrasc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.evr')
+                  th= __('main-rank.m3cp')
+              tbody
+                - if (main && main.evrasc && main.evrasc.length > 0) {
+                    each item in main.evrasc
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span= fix(item.evr)
+                        td
+                          span(class=sign(item.m3cp))= fix(item.m3cp)
+                - }
+
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.dividend')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.dividendyield')
+                  th= __('main-rank.nextdividenddate')
+              tbody
+                - if (main && main.dividend && main.dividend.length > 0) {
+                    each item in main.dividend
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span= fix(item.dividendyield)
+                        td
+                          span= dateformat_short(item.nextdividenddate)
+                - }
+                
+        .row
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.evebitdesc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.evebit')
+                  th= __('main-rank.m3cp')
+              tbody
+                - if (main && main.evebitdesc && main.evebitdesc.length > 0) {
+                    each item in main.evebitdesc
+
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span= fix(item.evebit)
+                        td
+                          span(class=sign(item.m3cp))= fix(item.m3cp)
+                - }
+
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.evebitasc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.evebit')
+                  th= __('main-rank.m3cp')
+              tbody
+                - if (main && main.evebitasc && main.evebitasc.length > 0) {
+                    each item in main.evebitasc
+
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span= fix(item.evebit)
+                        td
+                          span(class=sign(item.m3cp))= fix(item.m3cp)
+                - }
+                
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.profitmargindesc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.profitm')
+                  th= __('main-rank.operatingm')
+              tbody
+                - if (main && main.profitmargindesc && main.profitmargindesc.length > 0) {
+                    each item in main.profitmargindesc
+
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span= fix(item.profitm)
+                        td
+                          span= fix(item.operatingm)
+                - }
+                
+        .row
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.rg0ydesc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.rg_0y')
+                  th= __('main-rank.revenue_0y')
+              tbody
+                - if (main && main.rg0ydesc && main.rg0ydesc.length > 0) {
+                    each item in main.rg0ydesc
+
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span(class=sign(item.rg_0y))= fix(item.rg_0y)
+                        td
+                          span= format_dollar(item.revenue_0y)
+                - }
+                
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.eg0ydesc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.eg_0y')
+                  th= __('main-rank.earnings_0y')
+              tbody
+                - if (main && main.eg0ydesc && main.eg0ydesc.length > 0) {
+                    each item in main.eg0ydesc
+
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span(class=sign(item.eg_0y))= fix(item.eg_0y)
+                        td
+                          span= format_dollar(item.earnings_0y)
+                - }
+                
+          .col-md-4.mb-5
+            h6.mb-3= __('main-rank.header.grosspdesc')
+            table.table
+              thead
+                tr
+                  th= __('main-rank.ticker')
+                  th= __('main-rank.grossp')
+                  th= __('main-rank.totalrevenue')
+              tbody
+                - if (main && main.grosspdesc && main.grosspdesc.length > 0) {
+                    each item in main.grosspdesc
+
+                      tr
+                        td
+                          a(href="/view/stock?ticker=" + item.ticker target="_blank")= item.ticker
+                        td
+                          span= format_dollar(item.grossp)
+                        td
+                          span= format_dollar(item.totalrevenue)
+                - }
+

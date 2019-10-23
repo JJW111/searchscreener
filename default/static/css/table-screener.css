@@ -1,0 +1,77 @@
+.table tbody tr td {
+    vertical-align: middle;
+}
+
+.table tbody tr td > span {
+    display: block;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td.ticker {
+    max-width: 174px;
+}
+
+.table th {
+    padding: 0;
+    font-weight: 700;
+    background-color: #f1f3f6;
+}
+
+.table th a {
+    display: block;
+    padding: .5rem .75rem;
+    text-decoration: none;
+    color: black;
+}
+
+.table th:hover {
+    cursor: pointer;
+}
+
+.table th:not(:last-child) {
+    border-right: 1px solid #fff;
+}
+
+.table td {
+    padding: .2rem .75rem;
+}
+
+.paging a {
+    text-decoration: none;
+}
+
+.no-more-content {
+    text-align: center;
+    padding: 5rem;
+}
+
+.p-ticker > span {
+    width: 3.5rem;
+}
+
+    .p-ticker a {
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+.p-companyname > span {
+    width: 12rem;
+}
+
+.p-marketcap > span {
+    width: 7rem;
+}
+
+.p-pe > span {
+    width: 4rem;
+}
+
+.p-sector > span {
+    width: 12rem;
+}
+
+.p-industry > span {
+    width: 12rem;
+}

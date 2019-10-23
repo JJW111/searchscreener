@@ -1,0 +1,19 @@
+{
+  "name": "profit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jinwon Jeong",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/firestore": "^1.3.0",
+    "@google-cloud/storage": "^2.4.3",
+    "fast-csv": "^2.5.0",
+    "lodash.merge": "^4.6.1",
+    "moment": "^2.24.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  }
+}

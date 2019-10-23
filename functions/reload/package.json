@@ -1,0 +1,10 @@
+{
+  "name": "reload",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jinwon Jeong",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^2.4.3"
+  }
+}

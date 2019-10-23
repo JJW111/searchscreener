@@ -1,0 +1,369 @@
+include ../common.pug
+
+doctype html
+html
+  head
+    +meta
+    meta(name='viewport' content='width=device-width, initial-scale=1, maximum-scale=2, minimum-scale=1, user-scalable=yes')
+    title #{__('view.stock.title')} - #{ticker}
+    +common_css
+    +common_js
+    style.
+      .ohlc {
+        float: left;
+      }
+
+      .ohlc > span {
+        font-size: 1.25rem;
+      }
+
+      .ohlc > span.o,
+      .ohlc > span.h,
+      .ohlc > span.l, 
+      .ohlc > span.c {
+        color: #00A97F;
+      }
+
+      .ohlc > span:not(:last-child) {
+        margin-right: .25rem;
+      }
+
+      .fownership-table.table tbody tr td:first-child,
+      .ownership-table.table tbody tr td:first-child {
+        width: 80%;
+      }
+
+      .view-detail-table h6 ~ span {
+        padding-left: .5rem;
+      }
+
+      .view-detail-table {
+        border: 2px solid #dee2e6;
+      }
+
+      .table-row {
+        height: 100%;
+        padding: .5rem 0;
+      }
+
+      .table-column {
+        padding-left: 30px;
+        display: table;
+      }
+
+      .table-column > * {
+        display: table-cell;
+        width: 50%;
+        text-align: center;
+        vertical-align: middle;
+        margin-bottom: 0;
+      }
+
+      @media(min-width: 576px) {
+        .table-column {
+          height: 100%;
+        }
+      }
+
+      @media(min-width: 992px) {
+        .ohlc {
+          float: right;
+        }
+      }
+
+  body
+    .app
+      #top-fixed.top-wrap(style="z-index: 2;")
+        include ../includes/header.pug
+        include ../includes/navbar.pug
+
+      .container
+        .view-header
+          .row
+            .col-lg-6
+              h4 #{ticker} 
+                span (#{view.companyname})
+            .col-lg-6
+              .ohlc
+                span.o O #{view.open}
+                span.h H #{view.high}
+                span.l L #{view.low}
+                span.c C #{view.close}
+                span(class=sign(view.gappercent)).ml-2 #{view.chang}
+                span(class=sign(view.gappercent)) (#{view.changpercent}%)
+
+
+        .view-detail-table.mb-5
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.gappercent')
+                  span(class=sign(view.gappercent))= fix(view.gappercent)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.w52c')
+                  span= fix(view.w52c)
+
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.w52h')
+                  span(class=sign(view.w52hp)) #{fix(view.w52h)} (#{fix(view.w52hp)}%)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.w52l')
+                  span(class=sign(view.w52lp)) #{fix(view.w52l)} (#{fix(view.w52lp)}%)
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.pe')
+                  span= view.pe
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.forwardpe')
+                  span= view.forwardpe
+
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.eps')
+                  span= view.eps
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.forwardeps')
+                  span= view.forwardeps
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.avg30volume')
+                  span= format_dollar(view.avg30volume)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.exchange')
+                  span= view.exchange
+
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.sector')
+                  span= view.sector
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.industry')
+                  span= view.industry
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.peg')
+                  span= fix(view.peg)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.beta')
+                  span= fix(view.beta)
+
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.evr')
+                  span= fix(view.evr)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.evebit')
+                  span= fix(view.evebit)
+
+
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.roa')
+                  span= fix(view.roa)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.roe')
+                  span= fix(view.roe)
+          
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.dte')
+                  span= fix(view.dte)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.rps')
+                  span= fix(view.rps)
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.totalrevenue')
+                  span= format_dollar(view.totalrevenue)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.grossp')
+                  span= format_dollar(view.grossp)
+                  
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.ebitda')
+                  span= format_dollar(view.ebitda)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.payoutratio')
+                  span= fix(view.payoutratio)
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.totalcash')
+                  span= format_dollar(view.totalcash)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.totaldebt')
+                  span= format_dollar(view.totaldebt)
+                  
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.ocashflow')
+                  span= format_dollar(view.ocashflow)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.fcashflow')
+                  span= format_dollar(view.fcashflow)
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.grossm')
+                  span(class=sign(view.grossm))= fix(view.grossm)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.operatingm')
+                  span(class=sign(view.operatingm))= fix(view.operatingm)
+                  
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.profitm')
+                  span(class=sign(view.profitm))= fix(view.profitm)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.ebitdam')
+                  span(class=sign(view.ebitdam))= fix(view.ebitdam)
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.d5cp')
+                  span(class=sign(view.d5cp))= fix(view.d5cp)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.d30cp')
+                  span(class=sign(view.d30cp))= fix(view.d30cp)
+                  
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.m3cp')
+                  span(class=sign(view.m3cp))= fix(view.m3cp)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.y1cp')
+                  span(class=sign(view.y1cp))= fix(view.y1cp)
+
+          .row
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.dividendyield')
+                  span= fix(view.dividendyield)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.nextdividenddate')
+                  span= dateformat(view.nextdividenddate)
+                  
+            .col-lg-6
+              .table-row.row
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.exdividenddate')
+                  span= dateformat(view.exdividenddate)
+                .table-column.col-sm-6
+                  h6= __('view.stock.th.nextearningsdate')
+                  span= dateformat(view.nextearningsdate)
+
+
+
+        h5 Fund Ownership
+        table.table.fownership-table.mb-5
+          thead
+            tr 
+              th Organization
+              th Percent Held
+          tbody
+            tr
+              td= view.forgan0
+              td= view.fpctheld0
+            tr
+              td= view.forgan1
+              td= view.fpctheld1
+            tr
+              td= view.forgan2
+              td= view.fpctheld2
+            tr
+              td= view.forgan3
+              td= view.fpctheld3
+            tr
+              td= view.forgan4
+              td= view.fpctheld4
+            tr
+              td= view.forgan5
+              td= view.fpctheld5
+            tr
+              td= view.forgan6
+              td= view.fpctheld6
+            tr
+              td= view.forgan7
+              td= view.fpctheld7
+            tr
+              td= view.forgan8
+              td= view.fpctheld8
+            tr
+              td= view.forgan9
+              td= view.fpctheld9
+        
+        h5 Institution Ownership
+        table.table.ownership-table
+          thead
+            tr 
+              th Organization
+              th Percent Held
+          tbody
+            tr
+              td= view.organ0
+              td= view.pctheld0
+            tr
+              td= view.organ1
+              td= view.pctheld1
+            tr
+              td= view.organ2
+              td= view.pctheld2
+            tr
+              td= view.organ3
+              td= view.pctheld3
+            tr
+              td= view.organ4
+              td= view.pctheld4
+            tr
+              td= view.organ5
+              td= view.pctheld5
+            tr
+              td= view.organ6
+              td= view.pctheld6
+            tr
+              td= view.organ7
+              td= view.pctheld7
+            tr
+              td= view.organ8
+              td= view.pctheld8
+            tr
+              td= view.organ9
+              td= view.pctheld9
+
+
+
+

@@ -1,0 +1,45 @@
+nav#search-navbar.navbar.search-navbar(style="z-index: 1;")
+    a(href="javascript:void(0);").nav-link 
+        - if (paging.perPageList && paging.perPageList.length > 0) {
+            select(onchange="per(this.value)").custom-select.custom-select-sm
+                - for (var i = 0; i < paging.perPageList.length; i++) {
+                    - if (paging.perPageList[i] === paging.currentPerPage) {
+                        option(selected value=paging.currentPerPage) #{paging.currentPerPage} Result
+                    - } else {
+                        option(value=paging.perPageList[i]) #{paging.perPageList[i]} Result
+                    - }
+                - }
+        - }
+
+    .view-group
+        - if (view && view.list && view.currentView) {
+            .dropdown.view-dropdown
+                button(type="button" data-toggle="dropdown").btn.btn-light.dropdown-toggle.view-button.after-none
+                    svg(height="8" width="8")
+                        path(d="M0 0 L8 0 L4 6 Z" fill="#758696")
+                .dropdown-menu
+                    - for(var i = 0, j = 0; i < view.list.length; i++) {
+                        - if (view.list[i].k !== view.currentView) {
+                            a(href="javascript:view('" + view.list[i].k + "')" class="view-dropdown-" + j++).dropdown-item.view-dropdown-item= view.list[i].v
+                        - } else {
+                            a(href="javascript:void(0);").dropdown-item.view-dropdown-item.active= view.list[i].v
+                        - }
+                    - }
+
+            - for(var i = 0, j = 0; i < view.list.length; i++) {
+                - if (view.list[i].k !== view.currentView) {
+                    button(type="button" onclick="view('" + view.list[i].k + "');" class="view-button-" + j++).btn.btn-light.view-button= view.list[i].v
+                - } else {
+                    button(type="button").btn.btn-lgiht.active.view-button.active= view.list[i].v
+                - }
+            - }
+        - }
+
+    .nav-link-tabs
+        ul(style="display: inline-block;").nav.nav-tabs.border-0.nav-tabs-search
+            li.nav-item(style="display: inline-block;")
+                a(data-toggle="tab" href="#screener")#screener-toggle.bg-primary.nav-link.border-0.active Screener
+            li.nav-item(style="display: inline-block;")
+                a(data-toggle="tab" href="#filter")#filter-toggle.bg-primary.nav-link.border-0 Filter
+
+

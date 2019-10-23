@@ -1,0 +1,151 @@
+- var public_url= 'https://storage.googleapis.com/public.searchscreener.com'
+
+- 
+  const signedList = ['peg', 'pe', 'forwardpe', 'eg_0y', 'eg_0q', 'rg_0y', 'rg_0q', 
+    'roe', 'roa', 'w52hp', 'w52lp', 'd5cp', 'd30cp', 'm1cp', 'm3cp', 'm6cp', 'ytdcp', 'y1cp', 'y2cp', 'y5cp',
+    'grossm', 'operatingm', 'profitm', 'ebitdam', 'changpercent', 'gappercent'
+  ]
+
+- const dateList = ['nextdividenddate', 'exdividenddate', 'nextearningsdate']
+
+- 
+  const floatList = ['peg', 'pe', 'forwardpe', 'eps', 'forwardeps', 'eg_0y', 'eg_0q', 'rg_0y', 'rg_0q', 
+    'evr', 'evebit', 'rps', 'roe', 'roa', 'w52hp', 'w52lp', 'd5cp', 'd30cp', 'm1cp', 'm3cp', 'm6cp', 'ytdcp', 'y1cp', 'y2cp', 'y5cp',
+    'grossm', 'operatingm', 'profitm', 'ebitdam', 'close', 'changpercent', 'gappercent'
+  ]
+
+- 
+  const fmtList = ['marketcap', 'earnings_0y', 'earnings_0q', 'revenue_0y', 'revenue_0q', 
+    'totalrevenue', 'grossp', 'ebitda', 'totalcash', 'totaldebt', 'ocashflow', 'fcashflow'
+  ]
+
+- function sign(v) {
+  - return +v < 0 ? 'minus': 'plus';
+- }
+
+- function fix(v) {
+  - return (v && !isNaN(v)) && +v.toFixed(2) || '-';
+- }
+
+- function dateformat(d) {
+  - if (!d) return '-';
+  - if (typeof d === 'string') d = new Date(d);
+  - return d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2);
+- }
+
+
+- function dateformat_short(d) {
+  - if (!d) return null;
+  - if (typeof d === 'string') d = new Date(d);
+  - return ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2);
+- }
+
+- function format_dollar(value) {
+  - var v = +value;
+  - if (v && isNaN(v) || v === 0) return '-';
+  - if ((v / 1000000000) >= 1) {
+    - return `${fix(v / 1000000000)}B`;
+  - } else if ((v / 1000000) >= 0.01) {
+    - return `${fix(v / 1000000)}M`;
+  - } else {
+    - return v;
+  - }
+- }
+
+mixin meta
+  meta(charset='utf-8')
+  meta(name="title" content=__('Stock Screener - Search Screener'))
+  meta(name="keywords" content=__('stock, screener, stock screener, stock search, filter stock, free stock screener, 주식, 무료 주식 스크리너, 스크리너, 주식 스크리너, 주식 검색, 주식 필터'))
+  meta(name="description" content=__('Filter and search stocks'))
+
+mixin common_css
+  link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous")
+  link(href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet")
+  link(href=public_url+'/static/css/reset.css' rel='stylesheet')
+  link(href=public_url+'/static/css/common.css' rel='stylesheet')
+
+mixin common_js
+  script(src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+  script(src=public_url+'/static/js/common.js')
+
+
+
+- var checkbox_id_count = 0;
+mixin custom-checkbox(name, value, text)
+  .custom-control.custom-checkbox
+    input(type="checkbox" name=name value=value id='checkbox_custom_id'+checkbox_id_count).custom-control-input
+    label(for='checkbox_custom_id'+checkbox_id_count++).custom-control-label= text
+
+
+- var checkbox_id_count2 = 0;
+mixin custom-checkbox-filter(text, type, target, select_type)
+  .custom-control.custom-checkbox
+    input(type="checkbox" id='checkbox_custom_id'+checkbox_id_count2 select-type=select_type data-target=target data-type=type).custom-control-input
+    label(for='checkbox_custom_id'+checkbox_id_count2++).custom-control-label= text
+
+mixin filter-checkbox(text, type, target, select_type)
+  +filter-text(text)
+    +custom-checkbox-filter(text, type, target, select_type)
+
+mixin filter-text(text)
+  div(filter-text=text).filter-text.col-lg-4.mb-2
+    block
+
+mixin select-form(list, name, default_option)
+  select(name=name).custom-select.custom-select-sm.mb-3
+    option(disabled selected value)= default_option
+    - if (list) {
+        each item in list
+          option(value=item)= item
+    - }
+
+
+mixin select-checkbox-form(list, name, default_option, filter_placeholder)
+  .dropdown.select-checkbox
+    button(type="button" data-toggle="dropdown").btn.btn-skyblue.dropdown-toggle.after-none
+      span(origin=default_option).option-name= default_option
+    .dropdown-menu.dropdown-modal.p-0
+      .filter-wrap
+        .dropdown-header
+          .form-group.has-search.navbar-search.mb-0
+            span.fa.fa-search.form-control-feedback
+            input(type="text" placeholder=filter_placeholder).form-control.filter-input
+          button(type="button").close &times;
+        .dropdown-body
+          .row
+            - if (list) {
+              - var i = 0;
+                each item in list
+                  div(filter-text=item).filter-text.pb-2.col-lg-6
+                    .custom-control.custom-checkbox
+                      input(type="checkbox" name=name value=item).custom-control-input
+                      label.checkbox-label.custom-control-label= item
+            - }
+
+mixin alert-dismissable()
+  .alert.alert-light.alert-dismissible.mb-2
+    button(type="button" data-dismiss="alert").close &times;
+    block
+
+
+mixin confirm-modal(modal_id, yes_id, head, text, yes, no)
+  .modal.fade(id=modal_id).confirm-modal
+    .modal-dialog.modal-sm
+      .modal-content
+        .modal-header
+          button(type="button" data-dismiss="modal").close.close-modal-filter &times;
+          h4.modal-title= head
+        .modal-body
+            span= text
+        .modal-footer
+          button(type="button" data-dismiss="modal" id=yes_id).btn.btn-danger= yes
+          button(type="button" data-dismiss="modal").btn.btn-primary.ml-auto= no
+
+mixin filter-header(text)
+  .row.mb-3
+    .col-sm-12
+      h5
+        small= text

@@ -1,0 +1,223 @@
+create table price (
+ticker varchar(5) primary key,
+date date,
+open float,
+close float,
+high float,
+low float,
+volume bigint,
+gapPercent float,
+chang float,
+changPercent float,
+updated timestamp default current_timestamp not null
+);
+
+create table basic (
+ticker varchar(5) primary key,
+type varchar(10),
+companyName varchar(100),
+companyNameUpper varchar(100),
+sector varchar(100),
+industry varchar(100),
+exch varchar(50),
+exchange varchar(50),
+avg10Volume int,
+avg30Volume int,
+updated timestamp default current_timestamp not null
+);
+
+create table valuation (
+ticker varchar(5) primary key,
+marketcap bigint,
+sharesOutstanding bigint,
+employees int,
+updated timestamp default current_timestamp not null
+);
+
+
+
+create table performance (
+ticker varchar(5) primary key,
+d5cp float,
+d30cp float,
+m1cp float,
+m3cp float,
+m6cp float,
+ytdcp float,
+y1cp float,
+y2cp float,
+y5cp float,
+updated timestamp default current_timestamp not null
+);
+
+create table technical (
+ticker varchar(5) primary key,
+w52c float,
+w52h float,
+w52l float,
+w52hp float,
+w52lp float,
+pw52h float,
+pw52l float,
+newHigh boolean,
+newLow boolean,
+updated timestamp default current_timestamp not null
+);
+
+
+create table financial (
+ticker varchar(5) primary key,
+pe float,
+forwardPE float,
+eps float,
+forwardEPS float,
+peg float,
+rating varchar(20),
+payoutRatio float,
+dividendYield float,
+ttmDividendRate float,
+beta float,
+nextEarningsDate date,
+nextDividendDate date,
+exDividendDate date,
+ned varchar(5),
+ndd varchar(5),
+edd varchar(5),
+updated timestamp default current_timestamp not null
+);
+
+
+create table balancesheet (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+grossP bigint, /* grossProfits */
+ebitda bigint,
+totalCash bigint,
+totalDebt bigint,
+totalRevenue bigint
+);
+
+create table margins (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+ebitdaM float, /* ebitdaMargins */
+profitM float, /* profitMargins */
+grossM float, /* grossMargins */
+operatingM float /* operatingMargins */
+);
+
+create table cashflow (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+ocashflow bigint, /* operatingCashFlow */
+fcashflow bigint /* freeCashFlow */
+);
+
+create table worth (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+evr float, /* Enterprise value to revenue, EV/REVENUE */
+evebit float, /* Enterprise value to ebitda, EV/EBITDA */
+roa float, /* returnOnAssets */
+dte int, /* debtToEquity */
+roe float, /* returnOnEquity */
+rps float, /* revenuePerShare */
+totalCPS int /* totalCashPerShare */
+);
+
+create table her (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+earnings_0y bigint,
+earnings_1y bigint,
+earnings_2y bigint,
+earnings_3y bigint,
+earnings_0q bigint,
+earnings_1q bigint,
+earnings_2q bigint,
+earnings_3q bigint,
+revenue_0y bigint,
+revenue_1y bigint,
+revenue_2y bigint,
+revenue_3y bigint,
+revenue_0q bigint,
+revenue_1q bigint,
+revenue_2q bigint,
+revenue_3q bigint,
+date_0y varchar(20),
+date_1y varchar(20),
+date_2y varchar(20),
+date_3y varchar(20),
+date_0q varchar(20),
+date_1q varchar(20),
+date_2q varchar(20),
+date_3q varchar(20)
+);
+
+
+create table growth (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+eg_0y float,
+eg_1y float,
+eg_2y float,
+eg_0q float,
+eg_1q float,
+eg_2q float,
+rg_0y float,
+rg_1y float,
+rg_2y float,
+rg_0q float,
+rg_1q float,
+rg_2q float
+);
+
+create table fownership (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+forgan0 varchar(100),
+fpctHeld0 float,
+forgan1 varchar(100),
+fpctHeld1 float,
+forgan2 varchar(100),
+fpctHeld2 float,
+forgan3 varchar(100),
+fpctHeld3 float,
+forgan4 varchar(100),
+fpctHeld4 float,
+forgan5 varchar(100),
+fpctHeld5 float,
+forgan6 varchar(100),
+fpctHeld6 float,
+forgan7 varchar(100),
+fpctHeld7 float,
+forgan8 varchar(100),
+fpctHeld8 float,
+forgan9 varchar(100),
+fpctHeld9 float
+);
+
+create table ownership (
+ticker varchar(5) primary key,
+updated timestamp default current_timestamp not null,
+organ0 varchar(100),
+pctHeld0 float,
+organ1 varchar(100),
+pctHeld1 float,
+organ2 varchar(100),
+pctHeld2 float,
+organ3 varchar(100),
+pctHeld3 float,
+organ4 varchar(100),
+pctHeld4 float,
+organ5 varchar(100),
+pctHeld5 float,
+organ6 varchar(100),
+pctHeld6 float,
+organ7 varchar(100),
+pctHeld7 float,
+organ8 varchar(100),
+pctHeld8 float,
+organ9 varchar(100),
+pctHeld9 float
+);

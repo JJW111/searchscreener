@@ -1,0 +1,259 @@
+include ./common.pug
+
+doctype html
+html
+  head
+    +meta
+    meta(name='viewport' content='width=device-width, initial-scale=1, maximum-scale=2, minimum-scale=1, user-scalable=yes')
+    title= __('search.title')
+    +common_css
+    link(href=public_url+'/static/css/search.css' rel='stylesheet')
+    link(href=public_url+'/static/css/table-screener.css' rel='stylesheet')
+    +common_js
+    script(src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js")
+    script(src=public_url+'/static/js/search.js')
+  body
+    .app
+      #top-fixed.top-wrap(style="z-index: 2;")
+        include ./includes/header.pug
+        include ./includes/navbar.pug
+      
+      include ./includes/search/navbar.pug
+
+      div
+        .tab-content
+          #screener.tab-pane.active
+            .screener-wrap.mb-4
+              - if (list && list.length > 0) {
+              div(style="font-size: 13px;").table-area
+                table.responsive-table.table.table-striped.shadow
+                  thead
+                    tr
+                      - if (columns) {
+                          each item in columns
+                            - var l = item.toLowerCase()
+                            th(class='h-'+item)
+                              a(href="javascript: order('" + l + "');")= __('search.th.' + l)
+                                - if (order && l === order) {
+                                  - if (dir && dir === 'desc') {
+                                    svg(height="8" width="8" style="margin-left: 10px;")
+                                      path(d="M0 0 L8 0 L4 6 Z" fill="#758696")
+                                  - } else {
+                                    svg(height="8" width="8" style="margin-left: 10px;")
+                                      path(d="M0 6 L8 6 L4 0 Z" fill="#758696")
+                                  - }
+                                - }
+                      - }
+                  tbody
+                      each item in list
+                        tr
+                          - for(var prop in item) {
+                            - if (prop === 'ticker') {
+                              td(class='p-'+prop)
+                                span
+                                  a(href="/view/stock?ticker=" + item[prop] target="_blank")= item[prop]
+                            - } else {
+
+                              - var cl = ''
+                              - var value = item[prop]
+
+                              - if (value) {
+
+                                - if (signedList.includes(prop)) {
+                                    - cl = sign(item[prop])
+                                - }
+
+                                - if (prop === 'rating') {
+                                  case value
+                                    when 'strong_buy'
+                                      - value = __('search.select-rating.strongbuy')
+                                      break
+                                    when 'buy'
+                                      - value = __('search.select-rating.buy')
+                                      break
+                                    when 'hold'
+                                      - value = __('search.select-rating.hold')
+                                      break
+                                    when 'sell'
+                                      - value = __('search.select-rating.sell')
+                                      break
+                                    when 'strong_sell'
+                                      - value = __('search.select-rating.strongsell')
+                                      break
+                                    default
+                                      - value = '-'
+                                - }
+
+                                - if (dateList.includes(prop)) {
+                                  - value = dateformat(value)
+                                - }
+                                
+                                - if (floatList.includes(prop)) {
+                                  - value = fix(value)
+                                - }
+
+                                - if (fmtList.includes(prop)) {
+                                  - value = format_dollar(value)
+                                - }
+
+                              - }
+
+                              - if (value === null) {
+                                - value = '-'
+                              - }
+
+                              td(class='p-'+prop)
+                                span(class=cl)= value
+                            - }
+                          - }
+              - } else {
+                  div.no-more-content
+                    p.mb-3= __('search.pagination.nomorecontent')
+                    p.mb-3= __('search.pagination.w1')
+                    p.mb-3= __('search.pagination.w2')
+                    p.mb-3= __('search.pagination.s')
+              - }
+                    
+
+          #filter.tab-pane.shadow.mt-1
+            form#filter-form(action="/search" accept-charset="utf-8" method="get")
+              - if (view.currentView) {
+                input(type="hidden" name="view" value=view.currentView)
+              - }
+              - if (paging.currentPerPage) {
+                input(type="hidden" name="per" value=paging.currentPerPage)
+              - }
+              - if (order) {
+                input(type="hidden" name="order" value=order)
+              - }
+              - if (dir) {
+                input(type="hidden" name="dir" value=dir)
+              -}
+              .row
+                #filter-area.col-md-10
+                .col-md-2
+              .form-input.w-100
+                .clearfix.w-100
+                  button(type="button" data-toggle="modal" data-target="#add-anather-filter" data-color="faintly")#transparent-button.btn.btn-link.a-no-change + Add Another Filter
+                  .float-right.mt-2
+                    button(type="button" onclick="submitFilter(this.form)").btn.btn-primary.a-no-change Find Stock
+
+              #add-anather-filter.modal.fade.modal-backdrop-background
+                .modal-dialog.modal-dialog-scrollable.modal-xl.modal-dialog-centered
+                  .modal-content.filter-wrap
+                      .modal-header.pt-2.pb-2
+                        .form-group.has-search.navbar-search.mb-0
+                          span.fa.fa-search.form-control-feedback
+                          input(type="text" placeholder="Find filters..").form-control.filter-input
+                        button(type="button" data-dismiss="modal").close &times;
+                      .modal-body
+                        +filter-header("Stock Statistics")
+                        .row.mb-5
+                          +filter-checkbox(__('search.cs.exchange'), 'dropdown-checkbox', 'exchange')
+                          +filter-checkbox(__('search.cs.industry'), 'dropdown-checkbox', 'industry')
+                          +filter-checkbox(__('search.cs.sector'), 'dropdown-checkbox', 'sector')
+                          +filter-checkbox(__('search.cs.avg10volume'), 'range', 'avg10volume')
+                          +filter-checkbox(__('search.cs.avg30volume'), 'range', 'avg30volume')
+                          +filter-checkbox(__('search.cs.marketcap'), 'range', 'marketcap')
+                          +filter-checkbox(__('search.cs.pe'), 'range', 'pe')
+                          +filter-checkbox(__('search.cs.forwardpe'), 'range', 'forwardpe')
+                          +filter-checkbox(__('search.cs.eps'), 'range', 'eps')
+                          +filter-checkbox(__('search.cs.forwardeps'), 'range', 'forwardeps')
+                          +filter-checkbox(__('search.cs.sharesoutstanding'), 'range', 'sharesoutstanding')
+                          +filter-checkbox(__('search.cs.employees'), 'range', 'employees')
+                          +filter-checkbox(__('search.cs.beta'), 'range', 'beta')
+                          +filter-checkbox(__('search.cs.peg'), 'range', 'peg')
+                          +filter-checkbox(__('search.cs.rating'), 'select', 'rating', 'rating')
+                          +filter-checkbox(__('search.cs.payoutratio'), 'range', 'payoutRatio')
+                        
+                        +filter-header("Dividend & Date")
+                        .row.mb-5
+                          +filter-checkbox(__('search.cs.dividendyield'), 'range', 'dividendyield')
+                          +filter-checkbox(__('search.cs.ttmdividendrate'), 'range', 'ttmdividendrate')
+                          +filter-checkbox(__('search.cs.nextearningsdate'), 'select', 'ned', 'date')
+                          +filter-checkbox(__('search.cs.nextdividenddate'), 'select', 'ndd', 'date')
+                          +filter-checkbox(__('search.cs.exdividenddate'), 'select', 'edd', 'date')
+
+                        +filter-header("Growth")
+                        .row.mb-5
+                          +filter-checkbox(__('search.cs.eg_0y'), 'range', 'eg_0y')
+                          +filter-checkbox(__('search.cs.eg_0q'), 'range', 'eg_0q')
+                          +filter-checkbox(__('search.cs.rg_0y'), 'range', 'rg_0y')
+                          +filter-checkbox(__('search.cs.rg_0q'), 'range', 'rg_0q')
+
+                        +filter-header("Fundamental")
+                        .row.mb-5
+                          +filter-checkbox(__('search.cs.earnings_0y'), 'range', 'earnings_0y')
+                          +filter-checkbox(__('search.cs.earnings_0q'), 'range', 'earnings_0q')
+                          +filter-checkbox(__('search.cs.revenue_0y'), 'range', 'revenue_0y')
+                          +filter-checkbox(__('search.cs.revenue_0q'), 'range', 'revenue_0q')
+                          +filter-checkbox(__('search.cs.evr'), 'range', 'evr')
+                          +filter-checkbox(__('search.cs.evebit'), 'range', 'evebit')
+                          +filter-checkbox(__('search.cs.roe'), 'range', 'roe')
+                          +filter-checkbox(__('search.cs.roa'), 'range', 'roa')
+                          +filter-checkbox(__('search.cs.dte'), 'range', 'dte')
+                          +filter-checkbox(__('search.cs.rps'), 'range', 'rps')
+                          +filter-checkbox(__('search.cs.totalcps'), 'range', 'totalcps')
+                          +filter-checkbox(__('search.cs.grossp'), 'range', 'grossp')
+                          +filter-checkbox(__('search.cs.ebitda'), 'range', 'ebitda')
+                          +filter-checkbox(__('search.cs.totalcash'), 'range', 'totalcash')
+                          +filter-checkbox(__('search.cs.totaldebt'), 'range', 'totaldebt')
+                          +filter-checkbox(__('search.cs.totalrevenue'), 'range', 'totalrevenue')
+                          +filter-checkbox(__('search.cs.grossm'), 'range', 'grossm')
+                          +filter-checkbox(__('search.cs.operatingm'), 'range', 'operatingm')
+                          +filter-checkbox(__('search.cs.profitm'), 'range', 'profitm')
+                          +filter-checkbox(__('search.cs.ebitdam'), 'range', 'ebitdam')
+                          +filter-checkbox(__('search.cs.ocashflow'), 'range', 'ocashflow')
+                          +filter-checkbox(__('search.cs.fcashflow'), 'range', 'fcashflow')
+
+                          
+                        +filter-header("Performance")
+                        .row.mb-5
+                          +filter-checkbox(__('search.cs.d5cp'), 'range', 'd5cp')
+                          +filter-checkbox(__('search.cs.d30cp'), 'range', 'd30cp')
+                          +filter-checkbox(__('search.cs.m1cp'), 'range', 'm1cp')
+                          +filter-checkbox(__('search.cs.m3cp'), 'range', 'm3cp')
+                          +filter-checkbox(__('search.cs.m6cp'), 'range', 'm6cp')
+                          +filter-checkbox(__('search.cs.ytdcp'), 'range', 'ytdcp')
+                          +filter-checkbox(__('search.cs.y1cp'), 'range', 'y1cp')
+                          +filter-checkbox(__('search.cs.y2cp'), 'range', 'y2cp')
+                          +filter-checkbox(__('search.cs.y5cp'), 'range', 'y5cp')
+
+                        +filter-header("Technical")
+                        .row.mb-5
+                          +filter-checkbox(__('search.cs.w52hp'), 'range', 'w52hp')
+                          +filter-checkbox(__('search.cs.w52lp'), 'range', 'w52lp')
+                          +filter-checkbox(__('search.cs.newhigh'), 'checkbox-one', 'newhigh')
+                          +filter-checkbox(__('search.cs.newlow'), 'checkbox-one', 'newlow')
+                          +filter-checkbox(__('search.cs.close'), 'range', 'close')
+                          +filter-checkbox(__('search.cs.changpercent'), 'range', 'changpercent')
+                          +filter-checkbox(__('search.cs.gappercent'), 'range', 'gappercent')
+
+      #paging.paging.bottom-fixed
+        .prev-button
+          - if (paging.prevPage > 0) {
+            a(href="javascript:paging("+paging.prevPage+");") Prev
+          - }
+        .page-navigation
+          - if (paging && paging.maxPage && paging.currentPage) {
+            select(onchange="paging(this.value)").custom-select.custom-select-sm
+                - for (var i = 1; i <= paging.maxPage; i++) {
+                    - if (i == +paging.currentPage) {
+                        option(selected value=i) #{i}/#{paging.maxPage} Page
+                    - } else {
+                        option(value=i) Go to #{i} Page
+                    - }
+                - }
+          - }
+        .next-button
+          - if (paging.nextPage > 0) {
+            a(href="javascript:paging("+paging.nextPage+");") Next
+          - }
+
+    script.
+      $(document).ready(function () {
+        filterInit(htmlDecode("#{filterList.toString()}").split(','));
+      });
+
+    include ./includes/html.pug
+

@@ -1,0 +1,4 @@
+delete from basic where DATEDIFF(now(), updated) >= 14;
+delete from valuation where DATEDIFF(now(), updated) >= 14;
+delete from performance where DATEDIFF(now(), updated) >= 14;
+delete from technical where DATEDIFF(now(), updated) >= 14;
